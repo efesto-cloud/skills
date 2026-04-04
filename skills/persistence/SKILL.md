@@ -351,10 +351,10 @@ Use a `Readable` with cursor iteration rather than `.toArray()` to avoid loading
 - [ ] `ICollectionsDocument` updated
 - [ ] `Symbols.Repo.FooRepo` added
 - [ ] `container.bind(...).inRequestScope()` added
-- [ ] `pnpm run typecheck -w packages/core`
+- [ ] run typecheck
 
 ## Checklist — Modifying Existing
 
 - [ ] Read all four files before changing anything
 - [ ] New field → update `FooDocument` + `FooMapper.from()` + `FooMapper.to()` + interface if the signature changes
-- [ ] `pnpm run typecheck -w packages/core`
+- [ ] run typecheck

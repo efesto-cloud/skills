@@ -122,4 +122,4 @@ import FooRepoImpl from '~/repo/impl/FooRepoImpl.js';
 container.bind(Symbols.Repo.FooRepo).to(FooRepoImpl).inRequestScope();
 ```
 
-After making these changes, run `pnpm run typecheck -w packages/core` to verify everything is wired correctly.
+After making these changes, run typecheck to verify everything is wired correctly.

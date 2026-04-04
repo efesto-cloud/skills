@@ -312,13 +312,7 @@ Then in the mapper: `entity.props.bar = doc.bar ? BarMapper.from(doc.bar) : null
 
 ## Phase 5 — Typecheck
 
-Run the typecheck command for the core package (or whichever package contains these files):
-
-```bash
-pnpm run typecheck -w packages/core
-```
-
-Fix any errors before considering the task done.
+Run the typecheck command for the core package then fix any errors before considering the task done.
 
 ---
 
