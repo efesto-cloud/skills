@@ -17,6 +17,8 @@ Read the existing codebase before generating code:
 **If the project is new or the entity/dto directories are empty**, use the reference files in this skill's `references/` directory as your canonical examples instead:
 - `references/entity-example.ts` — fully annotated entity covering every pattern
 - `references/dto-example.ts` — fully annotated DTO covering every pattern
+- `references/entity-union.ts` — entity union pattern: abstract base + multiple concrete subtypes discriminated by a `type` literal
+- `references/dto-union.ts` — DTO union pattern: base interface + concrete sub-interfaces each carrying a `type` literal discriminant
 
 These reference files cover all the patterns described below. Read them before generating code on a fresh project — they contain inline comments explaining the *why* behind each convention.
 
@@ -36,11 +38,11 @@ For **modifying an existing entity**, read the files first, then apply changes c
 
 ## DTO Interface
 
-The DTO is the public serialization contract. It has no methods — pure data.
+The DTO is the public serialization contract. It has no methods — pure native data types.
 
 ```typescript
 // src/dto/IEntityName.ts
-interface IEntityName {
+export default interface IEntityName {
     _id: string;            // always string (serialized from ObjectId or UUID)
     name: string;
     description: string;
@@ -49,18 +51,6 @@ interface IEntityName {
     // foreign keys end with _id: string
     parent_id: string | null;
 }
-
-// Use namespace for enums and sub-types
-namespace IEntityName {
-    export type Status = "draft" | "published";
-    
-    export interface SubItem {
-        _id: string;
-        label: string;
-    }
-}
-
-export default IEntityName;
 ```
 
 **Rules:**
@@ -69,7 +59,8 @@ export default IEntityName;
 - Foreign keys: `parent_id`, `elemento_id`, etc.
 - `DateTime` → `string` (ISO); nullable → `string | null`
 - No methods, no business logic
-- Namespace for enums, union types, sub-interfaces
+- Only native types (string, number, boolean, arrays, nested DTOs) — no domain types or value objects here (use their DTO representation instead if needed)
+- 1 entity = 1 DTO interface;
 
 ---
 
@@ -91,7 +82,7 @@ type EntityNameProps = {
     // e.g. email: EmailAddress  (not string)
 };
 
-class EntityName extends Entity<EntityNameProps, ObjectId> implements IEntity<ObjectId> {
+export default class EntityName extends Entity<EntityNameProps, ObjectId> implements IEntity<ObjectId> {
     constructor(props: EntityNameProps, id?: ObjectId) {
         super(props, new ObjectId(id));  // always wrap in ID constructor
     }
@@ -134,59 +125,14 @@ class EntityName extends Entity<EntityNameProps, ObjectId> implements IEntity<Ob
         }, id);
     }
 }
-
-export default EntityName;
 ```
 
 **Key rules:**
 - Constructor: `super(props, new ObjectId(id))` — wraps id even if already the right type
 - **Never instantiate directly from outside** — always go through `static create()`
-- All `create()` props are optional with `??` defaults
+- The majority of `create()` props are optional with `??` defaults, required fields are the ones strictly necessary (usually dictated by business rules, not technical ones)
 - Getters for everything; only add setters when the operation has business meaning
-- `deleted_at` pattern: `DateTime<true> | null` (timezone-aware typed null)
-- Import paths: `~/` alias for internal, `.js` extension always required
-
-### Slug pattern (when the entity has a human-readable slug)
-
-```typescript
-import slugify from "slugify";
-
-static generateSlug(name: string): string {
-    if (!name.trim()) return "";
-    const normalized = slugify.default(name, { lower: true, strict: true, replacement: '-', trim: true });
-    return normalized
-        .replace(/[^a-z0-9-_]/g, '')
-        .replace(/-+/g, '-')
-        .replace(/_+/g, '_')
-        .replace(/^[-_]+|[-_]+$/g, '');
-}
-
-setSlug(slug: string) {
-    this.props.slug = slug.toLowerCase().trim()
-        .replace(/[^a-z0-9-_]/g, '').replace(/-+/g, '-')
-        .replace(/_+/g, '_').replace(/^[-_]+|[-_]+$/g, '');
-}
-```
-
-### Nested sub-entities (namespace pattern)
-
-When an entity has sub-entities that don't live as top-level entities:
-
-```typescript
-class MainEntity extends Entity<...> {
-    // main implementation
-}
-
-namespace MainEntity {
-    export class SubItem extends Entity<SubItemProps, ObjectId> {
-        static create(props: { ... }, id?: ObjectId) { ... }
-        toDTO(): IMainEntity.SubItem { ... }
-    }
-    export type SubItemProps = { ... };
-}
-
-export default MainEntity;
-```
+- `deleted_at` pattern: `DateTime<true> | null` for soft deletes
 
 ### Inheritance
 
@@ -200,6 +146,8 @@ class EntityName extends BaseClass<EntityNameProps, ObjectId> {
     }
 }
 ```
+
+For the **union + abstract base** pattern (multiple concrete subtypes distinguished by a `type` literal), read `references/entity-union.ts` (entities) and `references/dto-union.ts` (DTOs). Both files use matching type names and discriminants so you can see the entity↔DTO correspondence directly.
 
 ---
 
