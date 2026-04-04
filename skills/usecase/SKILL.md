@@ -39,27 +39,8 @@ Gather context if the user hasn't already provided it:
 
 ## Step 1 — Interface
 
-Create `useCase/{domain}/I{Name}.ts`:
-
-```ts
-import { IUseCase } from "@workspace/lib";
-import { Result } from "@workspace/lib/monad";
-import IMyEntity from "~/dto/IMyEntity.js";
-import NotFoundError from "~/errors/NotFoundError.js";
-import { WithOperatorAuth } from "~/service/IOperatorAuthService.js";
-// import { WithImpresaAuth } from "~/service/IImpresaAuthService.js";  // business entity auth
-// import { WithDualAuth }    from "~/service/IDualAuthService.js";      // either actor
-
-type IMyUseCase = IUseCase<
-  WithOperatorAuth<{
-    _id: string;
-    data: Partial<{ name: string }>;
-  }>,
-  Result<IMyEntity, NotFoundError>
->;
-
-export default IMyUseCase;
-```
+Create `useCase/{domain}/I{Name}.ts`. See [references/templates.md](./references/templates.md) for
+all four auth-variant examples (operator, business entity, dual, no auth).
 
 Rules:
 - The input is always `With{Auth}<YourPayload>`. If no auth is required, the payload is a plain object.
@@ -81,76 +62,18 @@ export * from "./useCase/{domain}/index.js";
 
 ## Step 2 — Implementation
 
-Create `useCase/{domain}/impl/{Name}.ts`. The shape depends on whether the use case mutates data.
+Create `useCase/{domain}/impl/{Name}.ts`. See [references/templates.md](./references/templates.md)
+for ready-to-copy implementations of CREATE, UPDATE, DELETE, GET, and SEARCH.
+
+The shape depends on whether the use case mutates data:
 
 ### Mutating (CREATE / UPDATE / DELETE / ADD / REMOVE / PUBLISH…)
 
-```ts
-import { Result } from "@workspace/lib/monad";
-import { inject, injectable } from "inversify";
-import audit from "~/decorator/audit.js";
-import withTransaction from "~/decorator/withTransaction.js";
-import Symbols from "~/di/Symbols.js";
-import MyEntity from "~/entity/MyEntity.js";
-import type IMyEntityRepo from "~/repo/IMyEntityRepo.js";
-import type IOperatorAuthService from "~/service/IOperatorAuthService.js";
-import { WithOperatorAuth } from "~/service/IOperatorAuthService.js";
-import IMyUseCase from "../IMyUseCase.js";
-
-@injectable()
-@withTransaction<IMyUseCase>()
-@audit<IMyUseCase>({
-  entity: MyEntity,
-  title: "Human-readable title",
-  verb: "CREATE", // CREATE | UPDATE | DELETE | ADD | REMOVE | LOGIN | LOGOUT | UPLOAD | PUBLISH
-  onOutput: (output, context) => {
-    if (output.isSuccess()) context.setEntityId(output.data._id);
-  },
-})
-export default class MyUseCaseName implements IMyUseCase {
-  readonly name = this.constructor.name;
-
-  constructor(
-    @inject(Symbols.Repo.MyEntityRepo) readonly repo: IMyEntityRepo,
-    @inject(Symbols.DomainService.OperatorAuthService) readonly auth: IOperatorAuthService,
-  ) {}
-
-  async execute(input: WithOperatorAuth<{ _id: string; data: Partial<{ name: string }> }>) {
-    return this.auth.flatRun(async () => {
-      const maybe = await this.repo.get(input._id);
-      if (!maybe.isSome()) return Result.err(new NotFoundError(MyEntity));
-
-      maybe.data.update(input.data);
-      await this.repo.save(maybe.data);
-      return Result.ok(maybe.data.toDTO());
-    }, input);
-  }
-}
-```
+Add `@withTransaction` and `@audit` decorators. Wrap the body with `auth.flatRun(async () => { … }, input)`.
 
 ### Read-only (GET / SEARCH / EXPORT…)
 
-```ts
-@injectable()
-export default class GetMyEntity implements IGetMyEntity {
-  readonly name = this.constructor.name;
-
-  constructor(
-    @inject(Symbols.Repo.MyEntityRepo) readonly repo: IMyEntityRepo,
-    @inject(Symbols.DomainService.DualAuthService) readonly auth: IDualAuthService,
-  ) {}
-
-  async execute(input: WithDualAuth<{ _id: string }>) {
-    return this.auth.flatRun(async () => {
-      const maybe = await this.repo.get(input._id);
-      if (!maybe.isSome()) return Result.err(new NotFoundError(MyEntity));
-      return Result.ok(maybe.data.toDTO());
-    }, input);
-  }
-}
-```
-
-No `@audit`, no `@withTransaction` for reads (unless the operation has side effects or needs a consistent snapshot).
+No `@audit`, no `@withTransaction` (unless the operation has side effects or needs a consistent snapshot).
 
 ### Decorator order
 
@@ -223,19 +146,10 @@ import MyNewUseCaseName from "~/useCase/myDomain/impl/MyNewUseCaseName.js";
 
 ## Logic Placement Guide
 
-**Put logic in the entity** when:
-- It validates or enforces an invariant on the entity's own data
-- It represents a state transition intrinsic to the entity (`entity.publish()`, `entity.delete()`)
-- It computes a value derivable from the entity's own fields
-- Multiple use cases need the same behaviour — entities are shared, use cases are not
+See [references/logic-guide.md](./references/logic-guide.md) for a full decision table and examples.
 
-**Put logic in the use case** when:
-- It orchestrates multiple entities, repos, or services
-- It needs to load external data not owned by the entity
-- It crosses aggregate boundaries
-- Auth checks and transactional coordination are inherently at this level
-
-Rule of thumb: if the operation can be expressed purely in terms of the entity's own fields, push it to the entity. As soon as it needs to load or save something, it belongs in the use case.
+Rule of thumb: if the operation can be expressed purely in terms of the entity's own fields, push it
+to the entity. As soon as it needs to load or save something, it belongs in the use case.
 
 ## Checklist
 
