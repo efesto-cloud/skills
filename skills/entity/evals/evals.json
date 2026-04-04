@@ -1,0 +1,23 @@
+{
+  "skill_name": "entity",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Crea una nuova entità 'Fornitore' nel pacchetto core. Un fornitore ha: ragione_sociale (string), email (nullable), telefono (nullable), indirizzo (string nullable), partita_iva (string nullable), note (string), deleted_at. Crea tutto il necessario: DTO, entity class, documento MongoDB, mapper e interfaccia repo.",
+      "expected_output": "IFornitore DTO in src/dto/, Fornitore entity class in src/entity/ with create() factory, getters, toDTO(), FornitoreDocument in src/db/Documents/, FornitoreMapper in src/mapper/, IFornitoreRepo in src/repo/, exported from index files, symbol added to Symbols.ts",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Aggiungi un campo 'codice' (string, univoco) all'entità Lavorazione esistente. Il campo deve avere un getter, essere incluso nel toDTO(), avere un default vuoto nel create(), e deve essere aggiornato nel DTO e nel mapper.",
+      "expected_output": "codice added to LavorazioneProps, getter added, create() updated with codice?: string default '', toDTO() updated, ILavorazione DTO updated, LavorazioneDocument updated, CaratteristicaMapper updated from/to",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Crea una nuova entità 'Preventivo' con le seguenti caratteristiche: ha un _id ObjectId, impresa_id (ObjectId), items che è un array di Preventivo.Item (ognuno con elemento_id, quantità number, prezzo_unitario number), stato (bozza | confermato | annullato), created_at DateTime, note string nullable. Deve avere un metodo business 'conferma()' che cambia lo stato da bozza a confermato (ritorna Result), un metodo 'aggiungiItem()' e un metodo 'totale()' che calcola il totale degli items.",
+      "expected_output": "IPreventivo DTO with nested namespace Item and Status type, Preventivo entity with namespace Preventivo.Item, create() factory, confirma() returning Result, aggiungiItem(), totale() computed, toDTO() mapping all fields including items array, PreventivDocument, PreventivoMapper, IPreventivoRepo",
+      "files": []
+    }
+  ]
+}
