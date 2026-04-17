@@ -7,8 +7,8 @@ Ready-to-copy templates for the most common patterns. Replace `Foo` / `foo` with
 ## Interface — operator auth, mutating
 
 ```ts
-import { IUseCase } from "@workspace/lib";
-import { Result } from "@workspace/lib/monad";
+import { IUseCase } from "@efesto-cloud/usecase";
+import { Result } from "@efesto-cloud/result";
 import IFoo from "~/dto/IFoo.js";
 import NotFoundError from "~/errors/NotFoundError.js";
 import NotLoggedError from "~/errors/NotLoggedError.js";
@@ -30,8 +30,8 @@ export default ICreateFoo;
 ## Interface — business entity auth
 
 ```ts
-import { IUseCase } from "@workspace/lib";
-import { Result } from "@workspace/lib/monad";
+import { IUseCase } from "@efesto-cloud/usecase";
+import { Result } from "@efesto-cloud/result";
 import IFoo from "~/dto/IFoo.js";
 import NotFoundError from "~/errors/NotFoundError.js";
 import NotLoggedError from "~/errors/NotLoggedError.js";
@@ -50,8 +50,8 @@ export default IGetSelfFoo;
 ## Interface — dual auth (either actor can call)
 
 ```ts
-import { IUseCase } from "@workspace/lib";
-import { Result } from "@workspace/lib/monad";
+import { IUseCase } from "@efesto-cloud/usecase";
+import { Result } from "@efesto-cloud/result";
 import IFoo from "~/dto/IFoo.js";
 import NotFoundError from "~/errors/NotFoundError.js";
 import { WithDualAuth } from "~/service/IDualAuthService.js";
@@ -72,8 +72,8 @@ export default ISearchFoo;
 ## Interface — no auth (public operation)
 
 ```ts
-import { IUseCase } from "@workspace/lib";
-import { Result } from "@workspace/lib/monad";
+import { IUseCase } from "@efesto-cloud/usecase";
+import { Result } from "@efesto-cloud/result";
 import IFoo from "~/dto/IFoo.js";
 import NotFoundError from "~/errors/NotFoundError.js";
 
@@ -90,7 +90,7 @@ export default IGetPublicFoo;
 ## Implementation — CREATE (with audit + transaction)
 
 ```ts
-import { Result } from "@workspace/lib/monad";
+import Result from "@efesto-cloud/result";
 import { inject, injectable } from "inversify";
 import audit from "~/decorator/audit.js";
 import withTransaction from "~/decorator/withTransaction.js";
@@ -134,7 +134,7 @@ export default class CreateFoo implements ICreateFoo {
 ## Implementation — UPDATE (load → mutate → save)
 
 ```ts
-import { Result } from "@workspace/lib/monad";
+import Result from "@efesto-cloud/result";
 import { inject, injectable } from "inversify";
 import audit from "~/decorator/audit.js";
 import withTransaction from "~/decorator/withTransaction.js";
@@ -182,7 +182,7 @@ export default class UpdateFoo implements IUpdateFoo {
 ## Implementation — DELETE (soft delete pattern)
 
 ```ts
-import { Result } from "@workspace/lib/monad";
+import Result from "@efesto-cloud/result";
 import { inject, injectable } from "inversify";
 import audit from "~/decorator/audit.js";
 import withTransaction from "~/decorator/withTransaction.js";
@@ -230,7 +230,7 @@ export default class DeleteFoo implements IDeleteFoo {
 ## Implementation — GET (read-only, dual auth)
 
 ```ts
-import { Result } from "@workspace/lib/monad";
+import Result from "@efesto-cloud/result";
 import { inject, injectable } from "inversify";
 import Symbols from "~/di/Symbols.js";
 import Foo from "~/entity/Foo.js";
@@ -264,7 +264,7 @@ export default class GetFoo implements IGetFoo {
 ## Implementation — SEARCH (read-only, operator auth)
 
 ```ts
-import { Result } from "@workspace/lib/monad";
+import Result from "@efesto-cloud/result";
 import { inject, injectable } from "inversify";
 import Symbols from "~/di/Symbols.js";
 import type IFooRepo from "~/repo/IFooRepo.js";

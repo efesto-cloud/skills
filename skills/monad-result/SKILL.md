@@ -1,10 +1,12 @@
 ---
 name: monad-result
-description: Use when writing or reviewing code that returns Result<T, E>.
+description: Use when writing or reviewing code that returns Result<T, E> from the @efesto-cloud/result package.
 argument-hint: "Paste the code snippet or use case and ask: 'normalize Result handling'"
 ---
 
 # Result Monad
+
+**Installation:** If not already installed, add the package with `pnpm add @efesto-cloud/result`.
 
 Use this skill to keep `Result<T, E>` usage consistent across the project.
 

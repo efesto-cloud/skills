@@ -20,7 +20,7 @@ export default Elemento;
 // src/entity/ElementoBase.ts  — shared base for all Elemento subtypes
 // =============================================================================
 
-import { Entity } from '@workspace/lib';
+import { Entity } from "@efesto-cloud/entity";
 import { ObjectId } from 'mongodb';
 import IElementoBase from '~/dto/IElementoBase.js';
 

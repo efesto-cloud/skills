@@ -14,6 +14,8 @@ description: >
 
 # Use Case Skill
 
+**Installation:** If not already installed, add the package with `pnpm add @efesto-cloud/usecase`.
+
 Use cases are the application layer's entry points in a hexagonal architecture. They orchestrate
 domain entities, repositories (persistence), and services (email, auth, storage, etc.) to execute
 a single well-defined business operation.

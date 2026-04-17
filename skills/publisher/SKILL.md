@@ -1,10 +1,12 @@
 ---
 name: publisher
-description: Use when writing or reviewing Publisher code.
+description: Use when writing or reviewing Publisher code from the @efesto-cloud/publisher package.
 argument-hint: "Paste code and ask: 'normalize Publisher usage'"
 ---
 
 # Publisher
+
+**Installation:** If not already installed, add the package with `pnpm add @efesto-cloud/publisher`.
 
 Use this skill when you need event broadcasting without stored state.
 

@@ -2,7 +2,8 @@
 name: population
 description: >
   Add MongoDB population (eager-loading of related documents via aggregation $lookup pipelines)
-  to an existing entity in a hexagonal architecture TypeScript project.
+  to an existing entity in a hexagonal architecture TypeScript project using the @efesto-cloud/population
+  and @efesto-cloud/mongodb-population packages.
   Use this skill whenever the user says things like "populate Foo with its Bar",
   "add population support for FooEntity", "I need to eager-load related entities",
   "wire up the $lookup for Foo", "add the populate option to FooRepo",
@@ -13,7 +14,11 @@ description: >
   by entity and persistence skills).
 ---
 
-# DAV Population Skill
+# Population Skill
+
+**Installation:** If not already installed, add the required packages:
+- `pnpm add @efesto-cloud/population` (for `Populate` type and `normalizePopulate` helper)
+- `pnpm add @efesto-cloud/mongodb-population` (for `BasePopulator` and `QueryBuilder` classes)
 
 Adds MongoDB population support — typed eager-loading of related documents via aggregation `$lookup` — to an existing entity. The entity, its DTO, document type, mapper, and repository are assumed to already exist. This skill only patches them where needed and writes the population infrastructure.
 
@@ -41,15 +46,14 @@ Do not proceed until you have at least the entity name and one field to populate
 
 Before touching any file, orient yourself:
 
-1. **Find the workspace lib prefix** — look at existing imports in `src/repo/` or `src/entity/`. It might be `@dav/lib`, `@myapp/lib`, `@workspace/lib`, etc. All examples below use `@workspace/lib` as placeholder.
-2. **Find the collection enum** — typically `src/db/CollectionNameEnum.ts` or similar. You'll need the collection name constant for `$lookup`.
-3. **Check for existing populators** — browse `src/repo/shape/`, `src/repo/populate/`, `src/repo/query/`. If any exist, read one to match the exact import style.
-4. **Read the target entity** — `src/entity/FooEntity.ts`
-5. **Read the target DTO** — `src/dto/IFoo.ts`
-6. **Read the target document** — `src/db/Documents/FooDocument.ts`
-7. **Read the target mapper** — `src/mapper/FooMapper.ts`
-8. **Read the repository interface** — `src/repo/IFooRepo.ts`
-9. **Read the repository implementation** — `src/repo/impl/FooRepoImpl.ts`
+1. **Find the collection enum** — typically `src/db/CollectionNameEnum.ts` or similar. You'll need the collection name constant for `$lookup`.
+2. **Check for existing populators** — browse `src/repo/shape/`, `src/repo/populate/`, `src/repo/query/`. If any exist, read one to match the exact import style.
+3. **Read the target entity** — `src/entity/FooEntity.ts`
+4. **Read the target DTO** — `src/dto/IFoo.ts`
+5. **Read the target document** — `src/db/Documents/FooDocument.ts`
+6. **Read the target mapper** — `src/mapper/FooMapper.ts`
+7. **Read the repository interface** — `src/repo/IFooRepo.ts`
+8. **Read the repository implementation** — `src/repo/impl/FooRepoImpl.ts`
 
 If `src/repo/shape/` or `src/repo/populate/` directories do not yet exist, create them.
 
@@ -131,11 +135,11 @@ export type FooShape = {
 ### 3b. QueryBuilder — `src/repo/query/FooQueryBuilder.ts`
 
 ```typescript
-import { normalizePopulate, type Populate } from '@workspace/lib';
+import { normalizePopulate, type Populate } from '@efesto-cloud/population';
+import { QueryBuilder } from '@efesto-cloud/mongodb-population';
 import FooDocument from '~/db/Documents/FooDocument.js';
 import FooPopulator from '../populate/FooPopulator.js';
 import type { FooShape } from '../shape/FooShape.js';
-import QueryBuilder from './QueryBuilder.js';
 
 export default class FooQueryBuilder extends QueryBuilder<FooDocument> {
     populateWith(fields: Populate<FooShape> = {}): this {
@@ -155,7 +159,7 @@ For each field:
 - **Nested population** (Bar itself has a populator): pass a sub-pipeline to the `lookup`. See `references/populator-nested-example.ts`.
 
 ```typescript
-import { BasePopulator, type NormalizedPopulate } from '@workspace/lib';
+import { BasePopulator, type NormalizedPopulate } from '@efesto-cloud/mongodb-population';
 import CollectionNameEnum from '~/db/CollectionNameEnum.js';
 import type TCollectionName from '~/db/TCollectionName.js';
 import type { FooShape } from '../shape/FooShape.js';
@@ -213,7 +217,7 @@ export default class FooPopulator extends BasePopulator<FooShape, TCollectionNam
 Add the `Options` namespace with a `populate` field, and add `options?` param to every query method (save/saveMany/delete do not need it):
 
 ```typescript
-import type { Populate } from '@workspace/lib';
+import type { Populate } from '@efesto-cloud/population';
 import type { FooShape } from './shape/FooShape.js';
 
 interface IFooRepo {

@@ -1,10 +1,12 @@
 ---
 name: monad-maybe
-description: Use when writing or reviewing code that returns Maybe<T>.
+description: Use when writing or reviewing code that returns Maybe<T> from the @efesto-cloud/maybe package.
 argument-hint: "Paste the code snippet or use case and ask: 'normalize Maybe handling'"
 ---
 
 # Maybe Monad
+
+**Installation:** If not already installed, add the package with `pnpm add @efesto-cloud/maybe`.
 
 Use this skill to keep `Maybe<T>` usage simple and predictable.
 

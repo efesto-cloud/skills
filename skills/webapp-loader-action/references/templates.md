@@ -76,7 +76,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
 ```ts
 import { container, ICreateFoo, Symbols } from '@workspace/core';
-import { Toast } from '@workspace/lib/monad';
+import Toast from '@efesto-cloud/toast';
 import type { ActionFunctionArgs } from 'react-router';
 import z from 'zod';
 import requireOperatorSessId from '~/shared/utils/requireOperatorSessId';
@@ -105,7 +105,7 @@ export async function action(args: ActionFunctionArgs) {
 
 ```ts
 import { container, ICreateFoo, IDeleteFoo, IUpdateFoo, Symbols } from '@workspace/core';
-import { Toast } from '@workspace/lib/monad';
+import Toast from '@efesto-cloud/toast';
 import type { ActionFunctionArgs } from 'react-router';
 import z from 'zod';
 import requireOperatorSessId from '~/shared/utils/requireOperatorSessId';

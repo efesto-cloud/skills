@@ -10,10 +10,9 @@
  *   - `populate()` receives `spec.bar` as `NormalizedPopulate<BarShape>` (not boolean)
  *   - Each nested private method accepts the sub-spec and calls sub-populator
  *
- * WORKSPACE NOTE: Replace `@workspace/lib` with your project's lib package.
  */
 
-import { BasePopulator, type NormalizedPopulate } from '@workspace/lib';
+import { BasePopulator, type NormalizedPopulate } from '@efesto-cloud/population';
 import CollectionNameEnum from '~/db/CollectionNameEnum.js';
 import type TCollectionName from '~/db/TCollectionName.js';
 import type { FooShape } from '../shape/FooShape.js';

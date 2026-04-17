@@ -12,7 +12,12 @@ description: >
   or when they reference repo/mapper/document files by name.
 ---
 
-# DAV Persistence Skill
+# Persistence Skill
+
+**Installation:** If not already installed, add the required packages:
+- `pnpm add @efesto-cloud/entity` (for `IEntityMapper` interface)
+- `pnpm add @efesto-cloud/maybe` (for nullable results)
+- `pnpm add @efesto-cloud/mongodb-database-context` (for transaction support)
 
 Helps you build the persistence layer — document type, repository interface, implementation, and mapper — for a hexagonal architecture TypeScript/MongoDB project following the ports-and-adapters pattern.
 
@@ -27,8 +32,7 @@ Population (the system for eager-loading related entities via aggregation pipeli
 
 1. **Read the entity and DTO** — identify which fields need type conversion (DateTime → Date, string id → ObjectId, value objects → their serialized form) vs. scalars that pass through unchanged.
 2. **Scan an existing repo in the project** — browse `src/repo/`, `src/repo/impl/`, `src/mapper/`, `src/db/Documents/`. Match the existing code style: import order, mapper shape, whether they use `Foo.create()` or `new Foo()` in mappers.
-3. **Find the workspace prefix** — check existing imports for the shared library (e.g., `@dav/lib`, `@myapp/lib`). Examples below use `@workspace/lib` as a placeholder.
-4. **If the project has few existing repo examples**, read the reference files — they are fully annotated and workspace-agnostic:
+3. **If the project has few existing repo examples**, read the reference files — they are fully annotated:
    - `references/simple-repo-example.ts` — no population, uses `.find()`/`.findOne()` directly
    - `references/aggregate-repo-example.ts` — optional population, aggregation pipeline, streaming, bulk save
    - `references/di-wiring-example.md` — the exact 4 files to update for DI registration
@@ -85,7 +89,7 @@ export default FooDocument;
 
 ```typescript
 // src/repo/IFooRepo.ts
-import { Maybe } from "@workspace/lib/monad";
+import { Maybe } from "@efesto-cloud/maybe";
 import { ObjectId } from "mongodb";
 import Foo from "~/entity/Foo.js";
 
@@ -116,6 +120,9 @@ export default IFooRepo;
 **When population is needed** — declare an `options` parameter and a namespace with an `Options` type. The population skill handles everything else; the interface just exposes the hook:
 
 ```typescript
+import type { Populate } from '@efesto-cloud/population';
+import type { FooShape } from './shape/FooShape.js';
+
 interface IFooRepo {
     search(query: SearchFoo, options?: IFooRepo.Options): Promise<Foo[]>;
     get(id: ObjectId, options?: IFooRepo.Options): Promise<Maybe<Foo>>;
@@ -135,7 +142,7 @@ namespace IFooRepo {
 
 ```typescript
 // src/repo/impl/FooRepoImpl.ts
-import { Maybe } from "@workspace/lib/monad";
+import { Maybe } from "@efesto-cloud/maybe";
 import { inject, injectable } from "inversify";
 import { Collection, Filter, ObjectId } from "mongodb";
 import type IDatabaseContext from "~/db/Context/IDatabaseContext.js";
@@ -194,7 +201,7 @@ The mapper is a plain object (not a class) that transforms between entity and do
 
 ```typescript
 // src/mapper/FooMapper.ts
-import { IEntityMapper } from "@workspace/lib";
+import { IEntityMapper } from "@efesto-cloud/entity";
 import { DateTime } from "luxon";
 import FooDocument from "~/db/Documents/FooDocument.js";
 import Foo from "~/entity/Foo.js";

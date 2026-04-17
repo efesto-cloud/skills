@@ -20,8 +20,9 @@
 
 // --- Imports ---
 // External libs first, then internal (always .js extension on imports)
-import { Entity, IEntity } from "@dav/lib";
-import { Result, Maybe } from "@dav/lib/monad";
+import { Entity, IEntity } from "@efesto-cloud/entity";
+import Maybe from "@efesto-cloud/maybe";
+import Result from "@efesto-cloud/result";
 import { DateTime } from "luxon";
 import { ObjectId } from "mongodb";
 import slugify from "slugify";

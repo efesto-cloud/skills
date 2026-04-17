@@ -5,8 +5,6 @@
  * can be populated (eager-loaded via MongoDB $lookup). The repository exposes
  * a `Populate<FooShape>` option that callers use to request specific fields.
  *
- * WORKSPACE NOTE: Replace `@workspace/lib` with the actual lib package name
- * in your project (e.g. `@dav/lib`, `@myapp/lib`).
  */
 
 // ---------------------------------------------------------------------------
@@ -62,4 +60,4 @@ export type CompositeShape = {
 //   - Callers might want to populate fields of the related entity too.
 //
 // Shape types never contain runtime logic — they are type-level descriptions
-// consumed by `normalizePopulate()` from @workspace/lib.
+// consumed by `normalizePopulate()` from @efesto-cloud/population.

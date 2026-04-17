@@ -9,6 +9,8 @@ argument-hint: 'Name and fields of the value object (e.g. "EmailAddress wrapping
 
 Generates or refactors **immutable TypeScript value objects** — domain primitives that encapsulate validation, normalization, and conversion logic.
 
+**Note:** This skill focuses on patterns for creating value objects and does not require specific npm packages. However, if you're integrating with @efesto-cloud packages, you may want to install `@efesto-cloud/entity` for the `IEntityMapper` interface when creating persistence mappers.
+
 ## Decision: what to generate
 
 | Request | Output |
@@ -21,16 +23,14 @@ Generates or refactors **immutable TypeScript value objects** — domain primiti
 ## File layout
 
 ```
-<package>/
+src/
 ├── value_object/
-│   ├── IFoo.ts          # Interface / raw shape
-│   └── impl/
-│       └── Foo.ts       # Immutable implementation
-└── mapper/
-    └── FooMapper.ts     # Only when persistence / transport is involved
+    ├── IFoo.ts          # Interface / raw shape
+    └── impl/
+        └── Foo.ts       # Immutable implementation
 ```
 
-Use relative imports. Never use project-specific import aliases (`@alias/`, `~pkg/`).
+Use relative imports for internal files. 
 
 ## Core rules — always apply
 

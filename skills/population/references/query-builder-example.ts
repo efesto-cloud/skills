@@ -5,11 +5,10 @@
  * The subclass's only job is to wire the entity's Shape + Populator into the
  * base QueryBuilder via a single `populateWith()` method.
  *
- * WORKSPACE NOTE: Replace `@workspace/lib` with your project's lib package name.
  * Replace `~/` path alias with whatever alias your tsconfig defines.
  */
 
-import { normalizePopulate, type Populate } from '@workspace/lib';
+import { normalizePopulate, type Populate } from '@efesto-cloud/population';
 import type FooDocument from '~/db/Documents/FooDocument.js';
 import FooPopulator from '../populate/FooPopulator.js';
 import type { FooShape } from '../shape/FooShape.js';
@@ -37,7 +36,7 @@ export default class FooQueryBuilder extends QueryBuilder<FooDocument> {
     /**
      * @param fields - Populate spec: object, array, `'*'`, or undefined/empty.
      *   Passing nothing or `{}` produces no $lookup stages.
-     *   The `Populate<FooShape>` type from @workspace/lib accepts multiple formats:
+     *   The `Populate<FooShape>` type from @efesto-cloud/population accepts multiple formats:
      *     { category: true }
      *     ['category', 'tags']
      *     '*'

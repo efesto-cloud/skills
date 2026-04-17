@@ -1,10 +1,14 @@
 ---
 name: observer
-description: Use when writing or reviewing Observable/Publisher.
-argument-hint: "Paste code and ask: 'normalize Observable/Publisher usage'"
+description: Use when writing or reviewing Observable code from the @efesto-cloud/observable package.
+argument-hint: "Paste code and ask: 'normalize Observable usage'"
 ---
 
 # Observer
+
+**Installation:** If not already installed, add the packages:
+- `pnpm add @efesto-cloud/observable` (provides `ObservableImpl`)
+- `pnpm add @efesto-cloud/publisher` (peer dependency for subscription management)
 
 Use this skill when you need reactive state or pub/sub.
 

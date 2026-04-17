@@ -10,10 +10,9 @@
  *   - 1:many via array of IDs (Foo stores `tag_ids[]` → load array of Tags)
  *   - Optional FK (`bar_id` can be null → preserve null with empty arrays)
  *
- * WORKSPACE NOTE: Replace `@workspace/lib` with your project's lib package.
  */
 
-import { BasePopulator, type NormalizedPopulate } from '@workspace/lib';
+import { BasePopulator, type NormalizedPopulate } from '@efesto-cloud/population';
 import CollectionNameEnum from '~/db/CollectionNameEnum.js';
 import type TCollectionName from '~/db/TCollectionName.js';
 import type { FooShape } from '../shape/FooShape.js';

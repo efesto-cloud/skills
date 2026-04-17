@@ -8,7 +8,6 @@
  * This file contains all four persistence files in one place for reference.
  * In the real project, each section goes in its own file as noted.
  *
- * Replace `@workspace/lib` with the actual shared lib package name (e.g. @dav/lib, @myapp/lib).
  * Replace `Foo`/`foo` with the real entity name throughout.
  */
 
@@ -35,7 +34,7 @@ export default FooDocument;
 // INTERFACE — src/repo/IFooRepo.ts
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-import { Maybe } from "@workspace/lib/monad";
+import Maybe from "@efesto-cloud/maybe";
 import { ObjectId } from "mongodb";
 import Foo from "~/entity/Foo.js";
 
@@ -61,7 +60,7 @@ export default IFooRepo;
 // IMPLEMENTATION — src/repo/impl/FooRepoImpl.ts
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-import { Maybe } from "@workspace/lib/monad";
+import Maybe from "@efesto-cloud/maybe";
 import { inject, injectable } from "inversify";
 import { Collection, Filter, ObjectId } from "mongodb";
 import type IDatabaseContext from "~/db/Context/IDatabaseContext.js";
@@ -142,7 +141,7 @@ export default class FooRepoImpl implements IFooRepo {
 // MAPPER — src/mapper/FooMapper.ts
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-import { IEntityMapper } from "@workspace/lib";
+import { IEntityMapper } from "@efesto-cloud/entity";
 import { DateTime } from "luxon";
 import FooDocument from "~/db/Documents/FooDocument.js";
 import Foo from "~/entity/Foo.js";
