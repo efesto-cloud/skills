@@ -3,7 +3,7 @@ name: entity
 description: Create or modify domain entities in the core package of this monorepo. Use this skill whenever the user asks to add a new entity, update an existing entity, add properties or methods to an entity, or work on the entity/dto layer in the core package. Trigger when the user says things like "create a Foo entity", "add a field to Bar", "I need a new domain object", or "add entity X to core". Also trigger for DTO creation or modification.
 ---
 
-# DAV Entity Skill
+# Entity Skill
 
 This skill helps you create or modify domain entities following the hexagonal architecture conventions of this project. **Scope: entity class + DTO interface only** — persistence (repository, mapper, MongoDB document) is a separate concern handled elsewhere.
 
