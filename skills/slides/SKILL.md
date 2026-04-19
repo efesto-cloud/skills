@@ -1,151 +1,92 @@
 ---
 name: slides
-description: Create HTML slide presentations from reference materials. Use when users ask to create slides, presentations, decks, or pitch materials. Accepts any input files (docs, PDFs, images, markdown) and produces clean HTML slides with CSS animations, keyboard navigation, and animated charts. Preferred over PowerPoint generation.
+description: >
+  Production skill that turns a slide-outline.md into a finished HTML presentation using reveal.js.
+  Always use this skill when the user says "generate the slides", "create the presentation", "build the slides",
+  "make the HTML", or "turn the outline into slides" — and especially whenever a slide-outline.md file is present
+  and the user wants to produce the actual deck. This skill does NOT gather context or draft content; it assumes
+  the outline already exists (produced by /storyboard-slides). Trigger immediately on any slide-generation request
+  without waiting for the user to mention reveal.js or HTML explicitly.
 ---
 
 # Slides
 
-Create professional HTML slide presentations with PPT-like navigation from any reference materials.
+Turn `slide-outline.md` into a finished HTML presentation using the bundled reveal.js assets.
+
+## Preconditions
+
+`slide-outline.md` must already exist. If it doesn't, tell the user to run `/storyboard-slides` first and stop.
+
+## Bundled assets
+
+All assets live next to this skill file. Copy relevant ones alongside the output HTML.
+
+| File | Purpose |
+|------|---------|
+| `assets/template.html` | Base HTML shell — copy this and fill in slides |
+| `assets/reveal.js` | Reveal.js library (local, no CDN) |
+| `assets/reveal.css` | Reveal.js core styles |
+| `assets/theme.css` | Dark theme; edit CSS custom properties in `:root` for brand colors |
+| `assets/custom.css` | Footer and print styles |
+| `assets/script.js` | Keyboard/touch navigation and animated counters |
+
+Always copy `reveal.js`, `reveal.css`, `theme.css`, `custom.css`, and `script.js` into the same folder as the output HTML so paths resolve correctly.
+
+## Reference files
+
+Read these on demand — don't load all of them upfront.
+
+| File | When to read |
+|------|-------------|
+| `references/REVEAL.md` | Always — covers slide HTML structure, fragments, transitions, backgrounds |
+| `references/advanced-features.md` | When the outline calls for animations, auto-animate, speaker notes, or complex fragments |
+| `references/charts.md` | When any slide contains a chart — critical flex/sizing patterns are here |
 
 ## Workflow
 
-### 1. Gather context
+1. **Read `slide-outline.md`** — note slide count, types (title, content, two-column, chart, etc.), and any animation/chart requirements.
+2. **Read `references/REVEAL.md`** (always).
+3. **Read `references/charts.md`** if charts are present; **read `references/advanced-features.md`** if animations or complex fragments are needed.
+4. **Copy `assets/template.html`** as the output base. Wire local asset paths (`reveal.js`, `reveal.css`, `theme.css`, `custom.css`, `script.js`) relative to the output file.
+5. **Implement slides** section by section, following the outline exactly. Don't invent content not in the outline.
+6. **Run `scripts/check-charts.js`** if any charts are present.
+7. **Run `scripts/check-overflow.js`** to detect overflow at 1920×1080.
+8. Fix any reported issues, then report the output path to the user.
 
-Read all provided reference files to understand:
-- Main topic and key messages
-- Technical details, metrics, outcomes
-- Images, diagrams, logos to include
+### Output location
 
-### 2. Draft content in markdown
+Default: same directory as `slide-outline.md`. Ask the user if unclear.
 
-Create a detailed markdown outline:
+## Layout classes
 
-```markdown
-# Presentation Title
+| Class | Use for |
+|-------|---------|
+| `title-slide` | Opening and closing slides |
+| `content-slide` | Bullet points, text |
+| `two-column` | Comparisons, side-by-side content |
+| `image-left` / `image-right` | Image paired with text |
 
-## Slide 1: Title
-- Main title
-- Subtitle
-- Author/date
+Keep to 4–5 bullet points per slide; titles under 60 characters.
 
-## Slide 2: Problem
-- Pain point 1
-- Pain point 2
+## Common patterns
 
-## Slide 3: Solution
-...
-```
-
-Ask user to review before proceeding.
-
-### 3. Generate HTML slides
-
-Use the base template from `assets/template.html` as starting point. The template includes:
-- Keyboard navigation (←/→, Space, Enter)
-- Navigation buttons (prev/next)
-- Progress bar
-- Fullscreen mode (F key)
-- Touch/swipe support
-- Animated charts and counters
-
-Apply these constraints:
-
-**Critical: No overlapping content**
-- Test each slide visually fits within 1280x720
-- Use `overflow: hidden` on slide containers
-- Limit bullet points to 4-5 per slide
-- Keep titles under 60 characters
-
-**Layout selection:**
-- `title-slide` - Opening/closing slides
-- `content-slide` - Bullet points, paragraphs
-- `two-column` - Comparisons, before/after
-- `image-left` / `image-right` - Image with text
-
-**Brand customization:**
-- Update CSS variables in `:root` for colors
-- Add logo.png in same folder or use absolute path
-- Customize footer with presentation name
-
-### 4. Preview and iterate
-
-Open HTML in browser. Common fixes:
-- Text overflow: Reduce content or font size
-- Image sizing: Use `object-fit: contain`
-- Spacing issues: Adjust padding/margins
-
-## Template Reference
-
-Base template location: `assets/base-template.html`
-
-### Design System
-
-The template uses a dark, modern aesthetic by default:
-- Dark gradient background (`#0a0a0a` → `#1a1a2e`)
-- Cyan/teal accent color (`#00d4aa`)
-- Glassmorphism cards with subtle borders
-- Segoe UI font family
-
-### CSS Variables
-```css
---primary-color: #00d4aa;     /* Cyan accent - titles, highlights */
---secondary-color: #00a8cc;   /* Secondary accent */
---accent-color: #667eea;      /* Purple accent */
---text-color: #ffffff;        /* White text */
---text-muted: #888;           /* Muted gray text */
---bg-color: #0a0a0a;          /* Nearly black */
---bg-secondary: #1a1a2e;      /* Dark blue-gray */
---card-bg: rgba(255,255,255,0.05);  /* Glass card */
-```
-
-### Slide Classes
-| Class | Use Case |
-|-------|----------|
-| `.title-slide` | Opening/closing with centered content |
-| `.section-slide` | Section dividers (01, 02...) |
-| `.two-column` | Side-by-side layouts |
-| `.three-column` | Card grids |
-| No class needed | Standard content slide |
-
-### Animation Classes
-| Class | Effect |
-|-------|--------|
-| `.animate-fade` | Fade in from below |
-| `.animate-left` | Slide from left |
-| `.animate-right` | Slide from right |
-| `.animate-scale` | Scale in |
-| `.animate-bounce` | Continuous bounce |
-| `.delay-1` to `.delay-8` | Stagger animations |
-
-Animations only play when slide becomes active.
-
-### Keyboard Shortcuts
-| Key | Action |
-|-----|--------|
-| `→` `Space` `Enter` | Next slide |
-| `←` `Backspace` | Previous slide |
-| `Home` `↑` | First slide |
-| `End` `↓` | Last slide |
-| `F` | Toggle fullscreen |
-
-## Common Patterns
-
-### Metrics display
+### Animated counter
 ```html
-<div class="metrics">
-    <div class="metric">
-        <div class="metric-value">99.9%</div>
-        <div class="metric-label">Uptime</div>
-    </div>
-</div>
+<div class="metric-value" data-target="99.9">0</div>
+<div class="metric-label">% Uptime</div>
 ```
+Animates from 0 to `data-target` when the slide becomes active.
 
-### Code blocks
+### Code block
 ```html
 <div class="code-block">
-    <code><span class="code-keyword">function</span> <span class="code-command">greet</span>(name) {
-    <span class="code-keyword">return</span> <span class="code-string">"Hello"</span>;
-}</code>
+  <code>
+    <span class="code-keyword">function</span>
+    <span class="code-command">greet</span>(name) {
+      <span class="code-keyword">return</span>
+      <span class="code-string">"Hello"</span>;
+    }
+  </code>
 </div>
 ```
 Syntax classes: `.code-keyword`, `.code-string`, `.code-comment`, `.code-command`, `.code-url`
@@ -153,83 +94,36 @@ Syntax classes: `.code-keyword`, `.code-string`, `.code-comment`, `.code-command
 ### Highlight box
 ```html
 <div class="highlight-box">
-    <strong>Key insight:</strong> Important information here
+  <strong>Key insight:</strong> Important information here
 </div>
 ```
 
-### Tags (categories)
-```html
-<span class="tag tag-fix">FIX</span>
-<span class="tag tag-improve">IMPROVEMENT</span>
-<span class="tag tag-new">NEW</span>
-```
-
-### Metrics (animated counter)
-```html
-<div class="metric-row">
-    <div class="metric">
-        <div class="metric-value" data-target="99.9">0</div>
-        <div class="metric-label">% Uptime</div>
-    </div>
-</div>
-```
-Counter animates from 0 to target when slide becomes active.
-
-### Comparison (before/after)
+### Before / after comparison
 ```html
 <div class="before-after">
-    <div class="before-box">
-        <div>😰</div>
-        <div>Before</div>
-    </div>
-    <div class="arrow-icon">→</div>
-    <div class="after-box">
-        <div>😎</div>
-        <div>After</div>
-    </div>
+  <div class="before-box"><div>Before</div></div>
+  <div class="arrow-icon">→</div>
+  <div class="after-box"><div>After</div></div>
 </div>
 ```
 
-### Diagram boxes
+### Diagram with arrow
 ```html
 <div class="diagram">
-    <div class="diagram-box primary">
-        <div class="diagram-box-title">Component</div>
-        <div class="diagram-box-content">Details</div>
-    </div>
-    <div class="diagram-arrow"></div>
-    <div class="diagram-box secondary">Next</div>
+  <div class="diagram-box primary">
+    <div class="diagram-box-title">Component A</div>
+  </div>
+  <div class="diagram-arrow"></div>
+  <div class="diagram-box secondary">Component B</div>
 </div>
 ```
 
-### Animated Counter
-```html
-<div class="metric-value" data-target="99.9">0</div>
-```
-Counter animates from 0 to target when slide becomes active.
-
-## Custom Animations
-
-For specialized animations (token streaming, failover diagrams), describe the desired effect and implement with CSS keyframes:
-
+### Custom CSS animation
 ```css
-@keyframes tokenStream {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
-.token {
-    animation: tokenStream 0.1s ease-out both;
-}
-.token:nth-child(1) { animation-delay: 0.1s; }
-.token:nth-child(2) { animation-delay: 0.2s; }
-/* ... */
+.animated { animation: fadeIn 0.4s ease-out both; }
+.animated:nth-child(2) { animation-delay: 0.2s; }
 ```
-
-## Advanced Patterns
-
-For complex visualizations (diagrams, timelines, animated demos), see [references/advanced-patterns.md](references/advanced-patterns.md).
-
-## Output
-
-Single self-contained HTML file. All styles inline. Opens in any browser. Print to PDF if needed.
