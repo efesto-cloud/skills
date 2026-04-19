@@ -1,11 +1,11 @@
 ---
 name: storyboard-slides
-description: Guide a user from blank page to a researched, structured slide outline through interview plus web research, producing a research dossier and slide outline ready to hand off to prepare-slides. Use when the user needs to build a complex presentation but doesn't know where to start, is staring at a blank page, or wants to storyboard/design a deck before writing it.
+description: Guide a user from blank page to a researched, structured slide outline through interview plus web research, producing a research dossier and slide outline ready to hand off to slides. Use when the user needs to build a complex presentation but doesn't know where to start, is staring at a blank page, or wants to storyboard/design a deck before writing it.
 ---
 
 # Storyboard Slides
 
-Pre-production phase for complex presentations. Produces two artifacts the user can review and edit, then hands off to `prepare-slides` → `slides`.
+Pre-production phase for complex presentations. Produces two artifacts the user can review and edit, then hands off to `/slides`.
 
 ## Workflow
 
@@ -40,7 +40,7 @@ Flag contradictions explicitly. Never invent stats — if research returns nothi
 
 ### 4. Outline
 
-Write `slide-outline.md` in the format `prepare-slides` consumes:
+Write `slide-outline.md` in the format `/slides` consumes:
 
 ```markdown
 ---
@@ -63,7 +63,7 @@ One slide per narrative beat. Reference dossier sections by anchor so downstream
 
 ### 5. Handoff
 
-Tell the user: "Run `prepare-slides` next with `slide-outline.md` and `research-dossier.md` as inputs."
+Tell the user: "Run `/slides` skill next with `slide-outline.md` and `research-dossier.md` as inputs."
 
 ## Rules
 
