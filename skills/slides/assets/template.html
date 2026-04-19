@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.min.css" integrity="sha512-ZIo9ivf88U0L1S+0D/npMNTTkjez5B9cK5xIecN4IA2OmtbTNBbPAZo/0cBC195sq7FU7cEOVPwtit37f/+1rQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h2>Barebones Presentation</h2>
+                <p>
+                    This example contains the bare minimum includes and markup required to run a reveal.js
+                    presentation.
+                </p>
+            </section>
+
+            <section>
+                <h2>No Theme</h2>
+                <p>There's no theme included, so it will fall back on browser defaults.</p>
+            </section>
+        </div>
+    </div>
+    <footer class="fixed-footer">
+        © {{COMPANY}} <a href="?print-pdf" class="print-link" id="print-link">Versione stampabile</a>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.js" integrity="sha512-GvouLVZT+gJSJW5eOfpG46xTaBb2c3VeNnbzmDYTRQkFlgvxNhnzZQqiQ/jAyAYPh+a9roBvAHJP6zvXIVq34Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        Reveal.initialize({
+            transition: "slide",
+            hash: true,
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            slideNumber: "c/t",
+            showSlideNumber: "all",
+            controlsTutorial: true,
+            progress: true,
+        });
+        
+        // Toggle print-pdf parameter
+        const printLink = document.getElementById('print-link');
+        const hasPrintPdf = window.location.search.includes('print-pdf');
+        
+        if (hasPrintPdf) {
+            printLink.href = window.location.pathname;
+            printLink.textContent = 'Versione interattiva';
+        } else {
+            printLink.href = '?print-pdf';
+            printLink.textContent = 'Versione stampabile';
+        }
+    </script>
+</body>
+</html>

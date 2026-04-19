@@ -1,0 +1,30 @@
+
+.fixed-footer {
+  position: fixed;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: "Outfit", sans-serif;
+  z-index: 1000;
+}
+
+.fixed-footer #print-link {
+  margin-left: 12px;
+  color: #fff8;
+  text-decoration: underline;
+}
+
+@media print {
+  .fixed-footer #print-link {
+    display: none;
+  }
+}
