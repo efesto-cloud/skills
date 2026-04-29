@@ -10,32 +10,56 @@
   },
   "plugins": [
     {
-      "name": "efesto-cloud-skills",
-      "description": "Efesto Cloud skills",
+      "name": "core",
+      "description": "",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/daisyui",
         "./skills/entity",
-        "./skills/excel-mapper",
         "./skills/monad-maybe",
         "./skills/monad-result",
-        "./skills/observer",
         "./skills/persistence",
         "./skills/population",
-        "./skills/publisher",
         "./skills/scaffold-project",
-        "./skills/slides",
+        "./skills/type-enum-dict",
+        "./skills/usecase",
+        "./skills/value-object"
+      ]
+    },
+    {
+      "name": "frontend",
+      "description": "",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/observer",
+        "./skills/publisher",
+        "./skills/webapp-loader-action",
+        "./skills/daisyui"
+      ]
+    },
+    {
+      "name": "spec",
+      "description": "",
+      "source": "./",
+      "strict": false,
+      "skills": [
         "./skills/spec-bootstrap",
         "./skills/spec-er-diagram",
         "./skills/spec-plan",
         "./skills/spec-structure",
-        "./skills/spec-sync",
-        "./skills/storyboard-slides",
-        "./skills/type-enum-dict",
-        "./skills/usecase",
-        "./skills/value-object",
-        "./skills/webapp-loader-action"
+        "./skills/spec-sync"
+      ]
+    },
+    {
+      "name": "misc",
+      "description": "",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/excel-mapper",
+        "./skills/slides",
+        "./skills/storyboard-slides"
       ]
     }
   ]
