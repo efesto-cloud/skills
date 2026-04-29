@@ -1,5 +1,5 @@
 ---
-name: entity-er-diagram
+name: spec-er-diagram
 description: Generate and save a Mermaid E/R diagram from entity definitions in the codebase. Use when you want to visualize domain entities, their attributes, keys, and relationships. Triggers on "generate ER diagram", "create entity diagram", "visualize domain model", "document entities", "entity relationship diagram".
 argument-hint: "Optional: path to entity source directory and/or output file path"
 ---
