@@ -15,12 +15,15 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/entity",
-        "./skills/usecase",
-        "./skills/type-enum-dict",
-        "./skills/value-object",
-        "./skills/persistence",
-        "./skills/population"
+        "./skills/core/entity",
+        "./skills/core/monad-maybe",
+        "./skills/core/monad-result",
+        "./skills/core/persistence",
+        "./skills/core/population",
+        "./skills/core/scaffold-project",
+        "./skills/core/type-enum-dict",
+        "./skills/core/usecase",
+        "./skills/core/value-object"
       ]
     },
     {
@@ -29,10 +32,34 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/observer",
-        "./skills/publisher",
-        "./skills/webapp-loader-action",
-        "./skills/daisyui"
+        "./skills/frontend/observer",
+        "./skills/frontend/publisher",
+        "./skills/frontend/webapp-loader-action",
+        "./skills/frontend/daisyui"
+      ]
+    },
+    {
+      "name": "spec",
+      "description": "",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/spec/spec-bootstrap",
+        "./skills/spec/spec-er-diagram",
+        "./skills/spec/spec-plan",
+        "./skills/spec/spec-structure",
+        "./skills/spec/spec-sync"
+      ]
+    },
+    {
+      "name": "misc",
+      "description": "",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/misc/excel-mapper",
+        "./skills/misc/slides",
+        "./skills/misc/storyboard-slides"
       ]
     }
   ]
